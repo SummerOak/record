@@ -1,0 +1,45 @@
+
+svn merge -c [version] [url]
+svn diff [file1] [file2] ....
+svn diff -r[version1]:[version2]
+
+adb shell am start -D com.UCMobile/com.UCMobile.main.UCMobile
+adb shell am set-debug-app -w com.UCMobile
+adb shell am start -n com.UCMobile/com.UCMobile.InnerUCMobile
+
+
+find . -name "*.class" -exec chmod 755 {} \; -exec /bin/echo {} \; | wc -l
+
+mount -o rw,remount /system
+
+python systrace.py -a com.UCMobile --time=10 -o cqx_trace.html sched gfx view wm
+
+adb logcat -b events -c & adb logcat -b events | grep browser
+
+
+apktool b ./out -o ./result.apk
+
+~/soft/androidsdk/build-tools/26.0.2/apksigner sign --ks chedifier.jks --ks-key-alias chedifier_alias --out signed.apk result.apk1. remove invisible chars in text file:
+
+tr -cd '\11\12\15\40-\176' < file-with-binary-chars > clean-file
+
+
+2. git commands:
+
+git blame -L 1,100 —- filepath
+git show $commit
+git diff $commit^ $commit
+
+
+3. svn commands:
+
+svn switch ^url;
+
+4. scp
+scp -P 7777 *.java wk@127.0.0.1:~/Documents/androidx86_60/frameworks/base/cmds/input/src/com/android/commands/input/
+scp -P 7777 wk@127.0.0.1:/home/wk/Documents/androidx86_60/out/target/product/x86_64/android_x86_64.iso ~/Downloads/
+
+```
+truncate -s 1G ff
+fallocate -l 12T ff
+```

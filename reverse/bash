@@ -1,0 +1,28 @@
+# build
+bapk(){
+   java -jar ~/soft/apktool/apktool.jar b $1 -f -o $2
+}
+
+dapk(){
+   java -jar ~/soft/apktool/apktool.jar d $1
+}
+
+sapk(){
+   jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/Workspace/keystore/summer.keystore -signedjar $2 $1 test
+}
+
+alias jdgui='java -jar ~/soft/jd-gui-1.4.0.jar &'
+
+dex2jar(){
+    ~/soft/dex-tools-2.1-SNAPSHOT/d2j-dex2jar.sh $1 -o $2
+}
+
+jar2dex(){
+    ~/soft/dex-tools-2.1-SNAPSHOT/d2j-jar2dex.sh $1 -o $2 -f
+}
+
+smali2dex(){
+	java -jar ~/soft/smali-2.5.2.jar a $1 -o $2
+}
+
+alias gdb='~/soft/androidsdk/ndk/21.3.6528147/prebuilt/darwin-x86_64/bin/gdb'

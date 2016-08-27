@@ -1,0 +1,352 @@
+MAGIC:
+oat
+079
+
+LOCATION:
+base.odex
+
+CHECKSUM:
+0x08c0ed01
+
+INSTRUCTION SET:
+Arm64
+
+INSTRUCTION SET FEATURES:
+smp,a53
+
+DEX FILE COUNT:
+1
+
+EXECUTABLE OFFSET:
+0x00002000
+
+INTERPRETER TO INTERPRETER BRIDGE OFFSET:
+0x00000000
+
+INTERPRETER TO COMPILED CODE BRIDGE OFFSET:
+0x00000000
+
+JNI DLSYM LOOKUP OFFSET:
+0x00000000
+
+QUICK GENERIC JNI TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK IMT CONFLICT TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK RESOLUTION TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK TO INTERPRETER BRIDGE OFFSET:
+0x00000000
+
+IMAGE PATCH DELTA:
+0 (0x00000000)
+
+IMAGE FILE LOCATION OAT CHECKSUM:
+0x6d7198f2
+
+IMAGE FILE LOCATION OAT BEGIN:
+0x70984000
+
+KEY VALUE STORE:
+classpath = 
+compiler-filter = interpret-only
+debuggable = true
+dex2oat-cmdline = --zip-fd=7 --zip-location=base.apk --oat-fd=8 --oat-location=/data/app/vmdl1624564522.tmp/oat/arm64/base.odex --instruction-set=arm64 --instruction-set-variant=generic --instruction-set-features=default --runtime-arg -Xms64m --runtime-arg -Xmx512m --compiler-filter=interpret-only --swap-fd=10 --debuggable
+dex2oat-host = Arm
+has-patch-info = false
+image-location = /data/dalvik-cache/arm64/system@framework@boot.art
+native-debuggable = false
+pic = false
+
+SIZE:
+8244
+
+OatDexFile:
+location: base.apk
+checksum: 0x02ef67af
+dex-file: 0x0000026c..0x000012f3
+type-table: 0x000012f4..0x00001373
+0: Lcom/summer/arttester/AbsClass; (offset=0x00001398) (type_idx=8) (StatusInitialized) (OatClassNoneCompiled)
+  0: void com.summer.arttester.AbsClass.<init>() (dex_method_idx=6)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.summer.arttester.AbsClass.absMethod(int, java.lang.String, java.lang.String) (dex_method_idx=7)
+    DEX CODE:
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+1: Lcom/summer/arttester/BuildConfig; (offset=0x0000139c) (type_idx=9) (StatusVerified) (OatClassNoneCompiled)
+  0: void com.summer.arttester.BuildConfig.<clinit>() (dex_method_idx=8)
+    DEX CODE:
+      0x0000: 1a00 5200                	| const-string v0, "true" // string@82
+      0x0002: 7110 1500 0000           	| invoke-static {v0}, boolean java.lang.Boolean.parseBoolean(java.lang.String) // method@21
+      0x0005: 0a00                     	| move-result v0
+      0x0006: 6a00 0200                	| sput-boolean v0, Z com.summer.arttester.BuildConfig.DEBUG // field@2
+      0x0008: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	locals: v0[sp + #4294967288]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.summer.arttester.BuildConfig.<init>() (dex_method_idx=9)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+2: Lcom/summer/arttester/MainActivity; (offset=0x000013a0) (type_idx=11) (StatusVerified) (OatClassSomeCompiled)
+  0: void com.summer.arttester.MainActivity.<init>() (dex_method_idx=13)
+    DEX CODE:
+      0x0000: 7010 0000 0000           	| invoke-direct {v0}, void android.app.Activity.<init>() // method@0
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.summer.arttester.MainActivity.onCreate(android.os.Bundle) (dex_method_idx=14)
+    DEX CODE:
+      0x0000: 6f20 0100 6500           	| invoke-super {v5, v6}, void android.app.Activity.onCreate(android.os.Bundle) // method@1
+      0x0003: 2200 0700                	| new-instance v0, android.widget.TextView // type@7
+      0x0005: 7020 0300 5000           	| invoke-direct {v0, v5}, void android.widget.TextView.<init>(android.content.Context) // method@3
+      0x0008: 1501 0442                	| const/high16 v1, #int +1107558400 // 0x42040000
+      0x000a: e920 c203 1000           	| invoke-virtual-quick {v0, v1},  // vtable@962
+      0x000d: 1a01 0a00                	| const-string v1, "Hello ART" // string@10
+      0x000f: e920 b503 1000           	| invoke-virtual-quick {v0, v1},  // vtable@949
+      0x0012: e920 7a01 0500           	| invoke-virtual-quick {v5, v0},  // vtable@378
+      0x0015: 2201 0a00                	| new-instance v1, com.summer.arttester.ImplClass // type@10
+      0x0017: 7010 0a00 0100           	| invoke-direct {v1}, void com.summer.arttester.ImplClass.<init>() // method@10
+      0x001a: 1212                     	| const/4 v2, #+1
+      0x001b: 1a03 0500                	| const-string v3, "ArtTest" // string@5
+      0x001d: 1a04 3f00                	| const-string v4, "hello art~" // string@63
+      0x001f: e940 0b00 2143           	| invoke-virtual-quick {v1, v2, v3, v4},  // vtable@11
+      0x0022: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x000013ac)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00002000)
+      vmap_table: (offset=0x000013d4)
+        quickened data
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	locals: v0[sp + #4294967272] v1[sp + #4294967276] v2[sp + #4294967280] v3[sp + #4294967284] v4[sp + #4294967288]
+      	ins: v5[sp + #8] v6[sp + #12]
+      	method*: v7[sp + #0]
+      	outs: v0[sp + #8] v1[sp + #12] v2[sp + #16] v3[sp + #20]
+    CODE: (code_offset=0x00000000 size_offset=0x00002010 size=0)
+      NO CODE!
+3: Lcom/summer/arttester/R$color; (offset=0x000013b0) (type_idx=12) (StatusVerified) (OatClassNoneCompiled)
+  0: void com.summer.arttester.R$color.<init>() (dex_method_idx=16)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+4: Lcom/summer/arttester/R$drawable; (offset=0x000013b4) (type_idx=13) (StatusVerified) (OatClassNoneCompiled)
+  0: void com.summer.arttester.R$drawable.<init>() (dex_method_idx=17)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+5: Lcom/summer/arttester/R$mipmap; (offset=0x000013b8) (type_idx=14) (StatusVerified) (OatClassNoneCompiled)
+  0: void com.summer.arttester.R$mipmap.<init>() (dex_method_idx=18)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+6: Lcom/summer/arttester/R$string; (offset=0x000013bc) (type_idx=15) (StatusVerified) (OatClassNoneCompiled)
+  0: void com.summer.arttester.R$string.<init>() (dex_method_idx=19)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+7: Lcom/summer/arttester/R; (offset=0x000013c0) (type_idx=16) (StatusInitialized) (OatClassNoneCompiled)
+  0: void com.summer.arttester.R.<init>() (dex_method_idx=20)
+    DEX CODE:
+      0x0000: 7010 1600 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@22
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+8: Lcom/summer/arttester/ImplClass; (offset=0x000013c4) (type_idx=10) (StatusInitialized) (OatClassSomeCompiled)
+  0: void com.summer.arttester.ImplClass.<init>() (dex_method_idx=10)
+    DEX CODE:
+      0x0000: 7010 0600 0000           	| invoke-direct {v0}, void com.summer.arttester.AbsClass.<init>() // method@6
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.summer.arttester.ImplClass.staticMethod(int, java.lang.String, java.lang.String) (dex_method_idx=12)
+    DEX CODE:
+      0x0000: 2200 1800                	| new-instance v0, java.lang.StringBuilder // type@24
+      0x0002: 7010 1700 0000           	| invoke-direct {v0}, void java.lang.StringBuilder.<init>() // method@23
+      0x0005: e920 4900 1000           	| invoke-virtual-quick {v0, v1},  // vtable@73
+      0x0008: e920 4e00 3000           	| invoke-virtual-quick {v0, v3},  // vtable@78
+      0x000b: e910 0700 0000           	| invoke-virtual-quick {v0},  // vtable@7
+      0x000e: 0c00                     	| move-result-object v0
+      0x000f: 7120 0200 0200           	| invoke-static {v2, v0}, int android.util.Log.e(java.lang.String, java.lang.String) // method@2
+      0x0012: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x000013d0)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00002020)
+      vmap_table: (offset=0x000013dc)
+        quickened data
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	locals: v0[sp + #4294967288]
+      	ins: v1[sp + #8] v2[sp + #12] v3[sp + #16]
+      	method*: v4[sp + #0]
+      	outs: v0[sp + #8] v1[sp + #12]
+    CODE: (code_offset=0x00000000 size_offset=0x00002030 size=0)
+      NO CODE!
+  2: void com.summer.arttester.ImplClass.absMethod(int, java.lang.String, java.lang.String) (dex_method_idx=11)
+    DEX CODE:
+      0x0000: 7130 0c00 2103           	| invoke-static {v1, v2, v3}, void com.summer.arttester.ImplClass.staticMethod(int, java.lang.String, java.lang.String) // method@12
+      0x0003: 7300                     	| return-void-no-barrier
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8] v1[sp + #12] v2[sp + #16] v3[sp + #20]
+      	method*: v4[sp + #0]
+      	outs: v0[sp + #8] v1[sp + #12] v2[sp + #16]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!

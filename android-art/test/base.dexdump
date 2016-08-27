@@ -1,0 +1,222 @@
+Processing '/data/app/com.netease.arttest-movU3Xv4w2XNC-P5oA6ewQ==/base.apk'...
+Opened '/data/app/com.netease.arttest-movU3Xv4w2XNC-P5oA6ewQ==/base.apk', DEX version '035'
+Class #0            -
+  Class descriptor  : 'Lcom/netease/arttest/BuildConfig;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : 'APPLICATION_ID'
+      type          : 'Ljava/lang/String;'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+    #1              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : 'BUILD_TYPE'
+      type          : 'Ljava/lang/String;'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+    #2              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : 'DEBUG'
+      type          : 'Z'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+    #3              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : 'VERSION_CODE'
+      type          : 'I'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+    #4              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : 'VERSION_NAME'
+      type          : 'Ljava/lang/String;'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : '<clinit>'
+      type          : '()V'
+      access        : 0x10008 (STATIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 0
+      outs          : 1
+      insns size    : 9 16-bit code units
+000320:                                        |[000320] com.netease.arttest.BuildConfig.<clinit>:()V
+000330: 1a00 2f00                              |0000: const-string v0, "true" // string@002f
+000334: 7110 0c00 0000                         |0002: invoke-static {v0}, Ljava/lang/Boolean;.parseBoolean:(Ljava/lang/String;)Z // method@000c
+00033a: 0a00                                   |0005: move-result v0
+00033c: 6a00 0200                              |0006: sput-boolean v0, Lcom/netease/arttest/BuildConfig;.DEBUG:Z // field@0002
+000340: 0e00                                   |0008: return-void
+      catches       : (none)
+      positions     : 
+        0x0000 line=7
+      locals        : 
+
+    #1              : (in Lcom/netease/arttest/BuildConfig;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10001 (PUBLIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+000344:                                        |[000344] com.netease.arttest.BuildConfig.<init>:()V
+000354: 7010 0d00 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@000d
+00035a: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     : 
+        0x0000 line=6
+      locals        : 
+        0x0000 - 0x0004 reg=0 this Lcom/netease/arttest/BuildConfig; 
+
+  Virtual methods   -
+  source_file_idx   : 5 (BuildConfig.java)
+
+Class #1            -
+  Class descriptor  : 'Lcom/netease/arttest/MainActivity;'
+  Access flags      : 0x0001 (PUBLIC)
+  Superclass        : 'Landroid/app/Activity;'
+  Interfaces        -
+  Static fields     -
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/netease/arttest/MainActivity;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10001 (PUBLIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+00035c:                                        |[00035c] com.netease.arttest.MainActivity.<init>:()V
+00036c: 7010 0000 0000                         |0000: invoke-direct {v0}, Landroid/app/Activity;.<init>:()V // method@0000
+000372: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     : 
+        0x0000 line=7
+      locals        : 
+        0x0000 - 0x0004 reg=0 this Lcom/netease/arttest/MainActivity; 
+
+  Virtual methods   -
+    #0              : (in Lcom/netease/arttest/MainActivity;)
+      name          : 'onCreate'
+      type          : '(Landroid/os/Bundle;)V'
+      access        : 0x0004 (PROTECTED)
+      code          -
+      registers     : 4
+      ins           : 2
+      outs          : 2
+      insns size    : 17 16-bit code units
+000374:                                        |[000374] com.netease.arttest.MainActivity.onCreate:(Landroid/os/Bundle;)V
+000384: 6f20 0100 3200                         |0000: invoke-super {v2, v3}, Landroid/app/Activity;.onCreate:(Landroid/os/Bundle;)V // method@0001
+00038a: 2200 0500                              |0003: new-instance v0, Landroid/widget/TextView; // type@0005
+00038e: 7020 0200 2000                         |0005: invoke-direct {v0, v2}, Landroid/widget/TextView;.<init>:(Landroid/content/Context;)V // method@0002
+000394: 1501 027f                              |0008: const/high16 v1, #int 2130837504 // #7f02
+000398: 6e20 0300 1000                         |000a: invoke-virtual {v0, v1}, Landroid/widget/TextView;.setText:(I)V // method@0003
+00039e: 6e20 0800 0200                         |000d: invoke-virtual {v2, v0}, Lcom/netease/arttest/MainActivity;.setContentView:(Landroid/view/View;)V // method@0008
+0003a4: 0e00                                   |0010: return-void
+      catches       : (none)
+      positions     : 
+        0x0000 line=11
+        0x0003 line=12
+        0x0008 line=13
+        0x000d line=14
+        0x0010 line=15
+      locals        : 
+        0x0008 - 0x0011 reg=0 textView Landroid/widget/TextView; 
+        0x0000 - 0x0011 reg=2 this Lcom/netease/arttest/MainActivity; 
+        0x0000 - 0x0011 reg=3 savedInstanceState Landroid/os/Bundle; 
+
+  source_file_idx   : 24 (MainActivity.java)
+
+Class #2            -
+  Class descriptor  : 'Lcom/netease/arttest/R$drawable;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in Lcom/netease/arttest/R$drawable;)
+      name          : 'ic_launcher_background'
+      type          : 'I'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+    #1              : (in Lcom/netease/arttest/R$drawable;)
+      name          : 'ic_launcher_foreground'
+      type          : 'I'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/netease/arttest/R$drawable;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10002 (PRIVATE CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+0003a8:                                        |[0003a8] com.netease.arttest.R.drawable.<init>:()V
+0003b8: 7010 0d00 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@000d
+0003be: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+  Virtual methods   -
+  source_file_idx   : -1 (unknown)
+
+Class #3            -
+  Class descriptor  : 'Lcom/netease/arttest/R$string;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in Lcom/netease/arttest/R$string;)
+      name          : 'app_name'
+      type          : 'I'
+      access        : 0x0019 (PUBLIC STATIC FINAL)
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/netease/arttest/R$string;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10002 (PRIVATE CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+0003c0:                                        |[0003c0] com.netease.arttest.R.string.<init>:()V
+0003d0: 7010 0d00 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@000d
+0003d6: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+  Virtual methods   -
+  source_file_idx   : -1 (unknown)
+
+Class #4            -
+  Class descriptor  : 'Lcom/netease/arttest/R;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+  Instance fields   -
+  Direct methods    -
+    #0              : (in Lcom/netease/arttest/R;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10002 (PRIVATE CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+0003d8:                                        |[0003d8] com.netease.arttest.R.<init>:()V
+0003e8: 7010 0d00 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@000d
+0003ee: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     : 
+      locals        : 
+
+  Virtual methods   -
+  source_file_idx   : -1 (unknown)
+

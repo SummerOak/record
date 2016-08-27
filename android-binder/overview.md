@@ -1,0 +1,8 @@
+Binder 概括
+
+1. Binder 包括以下组件： 服务进程Service组件、Binder库、Binder驱动程序、ServiceManager、客户端Binder代理接口；
+2. Binder库运行在用户空间，Binder驱动程序运行在内核空间， Service组件、Client代理接口和ServerManager都运行在用户空间；
+3. Binder驱动程序通过向用户空间暴露 /dev/binder 设备文件来和用户空间进行通信；
+4. ServiceManager 是一个系统进程，由init进程启动，启动后会把自己注册到Binder驱动程序中，作为唯一的上下文管理者， 然后一直等待客户端发送通信请求；
+5. 服务端通过Binder库提供的接口获取到ServiceManager的代理对象（这一步不需要进入内核空间），通过ServiceManager代理对象把本进程中的Service组件（名称、组件地址）注册到ServiceManager， 在这个过程中：1). Binder驱动程序会创建与Service对应的Binder实体对象（包含组件用户空间地址）与服务端进程关联；2). Binder驱动程序会创建与Service对应的Binder引用对象（包含一个句柄标识、所对应Binder实体对象）与ServiceManager进程关联；3). ServiceManager收到注册请求后， 把Service标识以及引用对象的句柄信息保存到一个服务列表中；
+6. 完成注册后，客户端就可以通过ServiceManager的代理对象向ServiceManager发送IPC取得Service的引用对象（注意这个引用对象不是ServiceManager进程对应的那个，而是新建了一个和客户端进程相关联的），客户端进程拿到Binder引用对象后，把他再封装成Binder代理对象，然后通过这个代理对象的接口和服务端Service组件通信；

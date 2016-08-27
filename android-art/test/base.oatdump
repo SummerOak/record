@@ -1,0 +1,276 @@
+MAGIC:
+oat
+131
+
+LOCATION:
+/data/app/com.netease.arttest-movU3Xv4w2XNC-P5oA6ewQ==/oat/x86_64/base.odex
+
+CHECKSUM:
+0xd979e3d0
+
+INSTRUCTION SET:
+X86_64
+
+INSTRUCTION SET FEATURES:
+-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-popcnt
+
+DEX FILE COUNT:
+1
+
+EXECUTABLE OFFSET:
+0x00001000
+
+INTERPRETER TO INTERPRETER BRIDGE OFFSET:
+0x00000000
+
+INTERPRETER TO COMPILED CODE BRIDGE OFFSET:
+0x00000000
+
+JNI DLSYM LOOKUP OFFSET:
+0x00000000
+
+QUICK GENERIC JNI TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK IMT CONFLICT TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK RESOLUTION TRAMPOLINE OFFSET:
+0x00000000
+
+QUICK TO INTERPRETER BRIDGE OFFSET:
+0x00000000
+
+IMAGE PATCH DELTA:
+0 (0x00000000)
+
+IMAGE FILE LOCATION OAT CHECKSUM:
+0x00000000
+
+IMAGE FILE LOCATION OAT BEGIN:
+0x00000000
+
+KEY VALUE STORE:
+classpath = PCL[]
+compiler-filter = extract
+concurrent-copying = true
+debuggable = true
+dex2oat-cmdline = --zip-fd=14 --zip-location=base.apk --input-vdex-fd=16 --output-vdex-fd=16 --oat-fd=15 --oat-location=/data/app/com.netease.arttest-movU3Xv4w2XNC-P5oA6ewQ==/oat/x86_64/base.odex --instruction-set=x86_64 --instruction-set-variant=x86_64 --instruction-set-features=default --runtime-arg -Xms64m --runtime-arg -Xmx512m --compiler-filter=extract --swap-fd=17 --debuggable --classpath-dir=/data/app/com.netease.arttest-movU3Xv4w2XNC-P5oA6ewQ== --class-loader-context=PCL[]
+dex2oat-host = X86
+native-debuggable = false
+pic = false
+
+SIZE:
+4096
+
+Dex file data for base.apk
+Num string ids: 51
+Num method ids: 14
+Num field ids: 8
+Num type ids: 19
+Num class defs: 5
+Unique strings loaded from dex code: 1
+Total strings loaded from dex code: 1
+Number of unique dex code items: 7
+Total number of dex code bytes: 92
+
+Layout data
+SectionTypeCode:LayoutTypeSometimesUsed(0-0) LayoutTypeStartupOnly(0-0) LayoutTypeHot(0-0) LayoutTypeUsedOnce(0-0) LayoutTypeUnused(0-0) 
+SectionTypeStrings:LayoutTypeSometimesUsed(0-0) LayoutTypeStartupOnly(0-0) LayoutTypeHot(0-0) LayoutTypeUsedOnce(0-0) LayoutTypeUnused(0-0) 
+
+Cumulative dex file data
+Num string ids: 51
+Num method ids: 14
+Num field ids: 8
+Num type ids: 19
+Num class defs: 5
+Unique strings loaded from dex code: 1
+Total strings loaded from dex code: 1
+Number of unique dex code items: 7
+Total number of dex code bytes: 92
+
+Dependencies of base.apk:
+  Landroid/app/Activity; must be assignable to Landroid/content/Context;
+  Landroid/widget/TextView; must be assignable to Landroid/view/View;
+  Landroid/app/Activity; must be resolved  with access flags 1
+  Landroid/os/Bundle; must be resolved  with access flags 1
+  Landroid/widget/TextView; must be resolved  with access flags 1
+  Ljava/lang/Boolean; must be resolved  with access flags 1
+  Ljava/lang/Object; must be resolved  with access flags 1
+  Landroid/app/Activity;-><init>()V is expected to be in class Landroid/app/Activity;, have the access flags 1
+  Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V is expected to be in class Landroid/app/Activity;, have the access flags 4
+  Landroid/widget/TextView;-><init>(Landroid/content/Context;)V is expected to be in class Landroid/widget/TextView;, have the access flags 1
+  Landroid/widget/TextView;->setText(I)V is expected to be in class Landroid/widget/TextView;, have the access flags 1
+  Lcom/netease/arttest/MainActivity;->setContentView(Landroid/view/View;)V is expected to be in class Landroid/app/Activity;, have the access flags 1
+  Ljava/lang/Boolean;->parseBoolean(Ljava/lang/String;)Z is expected to be in class Ljava/lang/Boolean;, have the access flags 9
+  Ljava/lang/Object;-><init>()V is expected to be in class Ljava/lang/Object;, have the access flags 1
+OatDexFile:
+location: base.apk
+checksum: 0x522340d1
+dex-file: 0x0000001c..0x00000a53
+type-table: 0x000002b4..0x000002f3
+0: Lcom/netease/arttest/BuildConfig; (offset=0x00000358) (type_idx=6) (StatusNotReady) (OatClassNoneCompiled)
+  0: void com.netease.arttest.BuildConfig.<clinit>() (dex_method_idx=4)
+    DEX CODE:
+      0x0000: 1a00 2f00                	| const-string v0, "true" // string@47
+      0x0002: 7110 0c00 0000           	| invoke-static {v0}, boolean java.lang.Boolean.parseBoolean(java.lang.String) // method@12
+      0x0005: 0a00                     	| move-result v0
+      0x0006: 6a00 0200                	| sput-boolean v0, Z com.netease.arttest.BuildConfig.DEBUG // field@2
+      0x0008: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	locals: v0[sp + #4294967288]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.netease.arttest.BuildConfig.<init>() (dex_method_idx=5)
+    DEX CODE:
+      0x0000: 7010 0d00 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@13
+      0x0003: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+1: Lcom/netease/arttest/MainActivity; (offset=0x0000035c) (type_idx=7) (StatusNotReady) (OatClassNoneCompiled)
+  0: void com.netease.arttest.MainActivity.<init>() (dex_method_idx=6)
+    DEX CODE:
+      0x0000: 7010 0000 0000           	| invoke-direct {v0}, void android.app.Activity.<init>() // method@0
+      0x0003: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+  1: void com.netease.arttest.MainActivity.onCreate(android.os.Bundle) (dex_method_idx=7)
+    DEX CODE:
+      0x0000: 6f20 0100 3200           	| invoke-super {v2, v3}, void android.app.Activity.onCreate(android.os.Bundle) // method@1
+      0x0003: 2200 0500                	| new-instance v0, android.widget.TextView // type@TypeIndex[5]
+      0x0005: 7020 0200 2000           	| invoke-direct {v0, v2}, void android.widget.TextView.<init>(android.content.Context) // method@2
+      0x0008: 1501 027f                	| const/high16 v1, #int +2130837504 // 0x7f020000
+      0x000a: 6e20 0300 1000           	| invoke-virtual {v0, v1}, void android.widget.TextView.setText(int) // method@3
+      0x000d: 6e20 0800 0200           	| invoke-virtual {v2, v0}, void com.netease.arttest.MainActivity.setContentView(android.view.View) // method@8
+      0x0010: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	locals: v0[sp + #4294967284] v1[sp + #4294967288]
+      	ins: v2[sp + #8] v3[sp + #12]
+      	method*: v4[sp + #0]
+      	outs: v0[sp + #8] v1[sp + #12]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+2: Lcom/netease/arttest/R$drawable; (offset=0x00000360) (type_idx=8) (StatusNotReady) (OatClassNoneCompiled)
+  0: void com.netease.arttest.R$drawable.<init>() (dex_method_idx=9)
+    DEX CODE:
+      0x0000: 7010 0d00 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@13
+      0x0003: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+3: Lcom/netease/arttest/R$string; (offset=0x00000364) (type_idx=9) (StatusNotReady) (OatClassNoneCompiled)
+  0: void com.netease.arttest.R$string.<init>() (dex_method_idx=10)
+    DEX CODE:
+      0x0000: 7010 0d00 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@13
+      0x0003: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+4: Lcom/netease/arttest/R; (offset=0x00000368) (type_idx=10) (StatusNotReady) (OatClassNoneCompiled)
+  0: void com.netease.arttest.R.<init>() (dex_method_idx=11)
+    DEX CODE:
+      0x0000: 7010 0d00 0000           	| invoke-direct {v0}, void java.lang.Object.<init>() // method@13
+      0x0003: 0e00                     	| return-void
+    OatMethodOffsets (offset=0x00000000)
+      code_offset: 0x00000000 
+    OatQuickMethodHeader (offset=0x00000000)
+      vmap_table: (offset=0x00000000)
+    QuickMethodFrameInfo
+      frame_size_in_bytes: 0
+      core_spill_mask: 0x00000000 
+      fp_spill_mask: 0x00000000 
+      vr_stack_locations:
+      	ins: v0[sp + #8]
+      	method*: v1[sp + #0]
+      	outs: v0[sp + #8]
+    CODE: (code_offset=0x00000000 size_offset=0x00000000 size=0)
+      NO CODE!
+
+OAT FILE STATS:
+Dumping cumulative use of 24 accounted bytes
+Code                             =        0 ( 0% of total)
+QuickMethodHeader                =       24 (100% of total)
+CodeInfoEncoding                 =        0 ( 0% of total)
+CodeInfoLocationCatalog          =        0 ( 0% of total)
+CodeInfoDexRegisterMap           =        0 ( 0% of total)
+CodeInfoStackMasks               =        0 ( 0% of total)
+CodeInfoRegisterMasks            =        0 ( 0% of total)
+CodeInfoInvokeInfo               =        0 ( 0% of total)
+CodeInfoStackMap                 =        0 ( 0% of total)
+  StackMapNativePc               =        0 (-nan% of stack map)
+  StackMapDexPcEncoding          =        0 (-nan% of stack map)
+  StackMapDexRegisterMap         =        0 (-nan% of stack map)
+  StackMapInlineInfoIndex        =        0 (-nan% of stack map)
+  StackMapRegisterMaskIndex      =        0 (-nan% of stack map)
+  StackMapStackMaskIndex         =        0 (-nan% of stack map)
+CodeInfoInlineInfo               =        0 ( 0% of total)
+  InlineInfoMethodIndexIdx       =        0 (-nan% of inline info)
+  InlineInfoDexPc                =        0 (-nan% of inline info)
+  InlineInfoExtraData            =        0 (-nan% of inline info)
+  InlineInfoDexRegisterMap       =        0 (-nan% of inline info)
+  InlineInfoIsLast               =        0 (-nan% of inline info)
+

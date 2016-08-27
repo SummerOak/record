@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://www.jeepxie.net/article/232869.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./ART深入浅出(7) - OAT文件的格式 _ jeepxie.net_files/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <script src="./ART深入浅出(7) - OAT文件的格式 _ jeepxie.net_files/push.js"></script><script src="./ART深入浅出(7) - OAT文件的格式 _ jeepxie.net_files/jquery.min.js"></script>
+    <!--<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>-->
+    <link rel="stylesheet" href="./ART深入浅出(7) - OAT文件的格式 _ jeepxie.net_files/css.css">
+    <title>ART深入浅出(7) - OAT文件的格式 / jeepxie.net</title>
+            <meta name="description" content="ART深入浅出(7) - OAT文件的格式 本文基于Android 7.1,不过因为从BSP拿到的版本略有区别,所以本文提到的源码未必与读者找到的源码完全一致.本文在提供源码片断时,将按照 &lt;源码相对android工程的路径&gt;:&lt;行号&gt; &lt;类名&gt; &lt;函数名&gt; 的方式,如果行号对不上,请参考类名和函数名来找到对应的源码. 了解ART的基本运作原理,就需要了解ART编译出的代码是怎么运行的.我们将使用oatdump得到的代码,进行仔细分析. 从简单示例出发 以一个非常简单的函数为例: frame ...">
+            
+</head>
+<body>
+<header>
+  <div class="container-fulid solid1">
+    <div class="container height32 font_size_85em">
+      <div style="float: left;">
+         <a href="http://www.jeepxie.net/index.php">首页</a>
+      </div>
+      <div style="float: right">
+        登录 | 注册
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </div>
+  
+  <div class="container">
+     <div class="row align-items-center" style="height: 78px;">
+          <div class="col-8 d-none d-xl-block">
+            
+
+          </div> 
+      <div class="col">
+            <div class="search">
+        <div class="bar6">
+          <form method="post" id="searchform" action="http://www.jeepxie.net/search/">
+              <input type="text" value="" name="keyword" id="keyword" title="search" placeholder="请输入您要搜索的内容...">
+              <input type="submit" value="搜 索" id="searchsubmit">
+          </form>
+        </div>    
+        </div>
+      </div>
+    
+    </div>
+  </div>
+  
+    <nav class="container-fulid bg-success mbottom15">
+    <div class="container height45">
+      <ul class="navlist font_size_125em">
+        <li><a class="padding_right_left_15" href="http://www.jeepxie.net/index.php">首页</a></li> 
+      </ul>
+    </div>
+  </nav>
+  </header>
+		
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+		
+		<h1 class="htitle">ART深入浅出(7) - OAT文件的格式</h1>
+		
+				<div id="tags">
+		            		        </div>
+		
+		    		    
+		    
+		  
+		    
+			<section>
+				<article class="clearfix" id="content">
+				<!-- flowchart 箭头图标 勿删 -->
+							<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg>
+							<p><em>本文基于Android 7.1，不过因为从BSP拿到的版本略有区别，所以本文提到的源码未必与读者找到的源码完全一致。本文在提供源码片断时，将按照 &lt;源码相对android工程的路径&gt;:&lt;行号&gt; &lt;类名&gt; &lt;函数名&gt; 的方式，如果行号对不上，请参考类名和函数名来找到对应的源码。</em></p>
+
+<p>了解ART的基本运作原理，就需要了解ART编译出的代码是怎么运行的。我们将使用oatdump得到的代码，进行仔细分析。</p>
+
+
+
+<h1 id="从简单示例出发">从简单示例出发</h1>
+
+<p>以一个非常简单的函数为例： <br>
+frameworks/base/core/java/android/app/Activity.java:988</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs "><span class="hljs-number">988</span>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(@Nullable Bundle savedInstanceState,
+989            @Nullable PersistableBundle persistentState) {
+<span class="hljs-number">990</span>        onCreate(savedInstanceState);
+<span class="hljs-number">991</span>    }</code></pre>
+
+<p>这个函数，仅仅是调用了同名的onCreate函数的实现。 <br>
+编译成oat文件后（存放在boot.oat内），用oatdump出来，我找到对应的dex代码</p>
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">  <span class="hljs-number">129</span>: void android<span class="hljs-preprocessor">.app</span><span class="hljs-preprocessor">.Activity</span><span class="hljs-preprocessor">.onCreate</span>(android<span class="hljs-preprocessor">.os</span><span class="hljs-preprocessor">.Bundle</span>, android<span class="hljs-preprocessor">.os</span><span class="hljs-preprocessor">.PersistableBundle</span>) (dex_method_idx=<span class="hljs-number">2085</span>)
+    DEX CODE:
+      <span class="hljs-number">0x0000</span>: <span class="hljs-number">6e20</span> <span class="hljs-number">2408</span> <span class="hljs-number">1000</span>            | invoke-virtual {v0, v1}, void android<span class="hljs-preprocessor">.app</span><span class="hljs-preprocessor">.Activity</span><span class="hljs-preprocessor">.onCreate</span>(android<span class="hljs-preprocessor">.os</span><span class="hljs-preprocessor">.Bundle</span>) // method<span class="hljs-localvars">@2084</span>
+      <span class="hljs-number">0x0003</span>: <span class="hljs-number">0e00</span>                      | return-void</code></pre>
+
+<p>这个dex代码看起来也非常简单。 <br>
+ 接下来，我们看看编译出的机器码，反汇编后是什么:</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">    QuickMethodFrameInfo
+      frame_size_in_bytes: <span class="hljs-number">48</span>
+      core_spill_mask: <span class="hljs-number">0x000040e0</span> (<span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r7</span>, <span class="hljs-built_in">r14</span>)
+      fp_spill_mask: <span class="hljs-number">0x00000000</span> 
+      vr_stack_locations:
+        ins: v0[sp + <span class="hljs-preprocessor">#52] v1[sp + #56] v2[sp + #60]</span>
+        method*: v3[sp + <span class="hljs-preprocessor">#0]</span>
+        outs: v0[sp + <span class="hljs-preprocessor">#4] v1[sp + #8]</span>
+    CODE: (code_offset=<span class="hljs-number">0x0337a6d5</span> size_offset=<span class="hljs-number">0x0337a6d0</span> size=<span class="hljs-number">66</span>)...
+      <span class="hljs-number">0x0337a6d4</span>: f5ad5c00  <span class="hljs-keyword">sub</span>     <span class="hljs-built_in">r12</span>, sp, <span class="hljs-preprocessor">#8192</span>
+      <span class="hljs-number">0x0337a6d8</span>: f8dcc000  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r12</span>, [<span class="hljs-built_in">r12</span>, <span class="hljs-preprocessor">#0]</span>
+        StackMap [native_pc=<span class="hljs-number">0x337a6dd</span>] (dex_pc=<span class="hljs-number">0x0</span>, native_pc_offset=<span class="hljs-number">0x8</span>, dex_register_map_offset=<span class="hljs-number">0xffffffff</span>, inline_info_offset=<span class="hljs-number">0xffffffff</span>, register_mask=<span class="hljs-number">0x0</span>, stack_mask=<span class="hljs-number">0</span>b000000)
+      <span class="hljs-number">0x0337a6dc</span>: b5e0      <span class="hljs-keyword">push</span>    {<span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r7</span>, lr}
+      <span class="hljs-number">0x0337a6de</span>: b088      <span class="hljs-keyword">sub</span>     sp, sp, <span class="hljs-preprocessor">#32</span>
+      <span class="hljs-number">0x0337a6e0</span>: <span class="hljs-number">9000</span>      str     <span class="hljs-built_in">r0</span>, [sp, <span class="hljs-preprocessor">#0]</span>
+      <span class="hljs-number">0x0337a6e2</span>: f8b9c000  ldrh<span class="hljs-preprocessor">.w</span>  <span class="hljs-built_in">r12</span>, [<span class="hljs-built_in">r9</span>, <span class="hljs-preprocessor">#0]  ; state_and_flags</span>
+      <span class="hljs-number">0x0337a6e6</span>: f1bc0f00  cmp<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r12</span>, <span class="hljs-preprocessor">#0</span>
+      <span class="hljs-number">0x0337a6ea</span>: d10a      bne     +<span class="hljs-number">20</span> (<span class="hljs-number">0x0337a702</span>)
+      <span class="hljs-number">0x0337a6ec</span>: <span class="hljs-number">461</span>d      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r3</span>
+      <span class="hljs-number">0x0337a6ee</span>: <span class="hljs-number">460</span>e      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r1</span>
+      <span class="hljs-number">0x0337a6f0</span>: <span class="hljs-number">4617</span>      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r7</span>, <span class="hljs-built_in">r2</span>
+      <span class="hljs-number">0x0337a6f2</span>: <span class="hljs-number">6808</span>      ldr     <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#0]</span>
+      <span class="hljs-number">0x0337a6f4</span>: f8d004c8  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#1224]</span>
+      <span class="hljs-number">0x0337a6f8</span>: f8d0e020  ldr<span class="hljs-preprocessor">.w</span>   lr, [<span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#32]</span>
+      <span class="hljs-number">0x0337a6fc</span>: <span class="hljs-number">47</span>f0      blx     lr
+        StackMap [native_pc=<span class="hljs-number">0x337a6ff</span>] (dex_pc=<span class="hljs-number">0x0</span>, native_pc_offset=<span class="hljs-number">0x2a</span>, dex_register_map_offset=<span class="hljs-number">0x0</span>, inline_info_offset=<span class="hljs-number">0xffffffff</span>, register_mask=<span class="hljs-number">0xe0</span>, stack_mask=<span class="hljs-number">0</span>b000000)
+          v0: <span class="hljs-keyword">in</span> register (<span class="hljs-number">6</span>)   [entry <span class="hljs-number">0</span>]
+          v1: <span class="hljs-keyword">in</span> register (<span class="hljs-number">7</span>)   [entry <span class="hljs-number">1</span>]
+          v2: <span class="hljs-keyword">in</span> register (<span class="hljs-number">5</span>)   [entry <span class="hljs-number">2</span>]
+      <span class="hljs-number">0x0337a6fe</span>: b008      <span class="hljs-keyword">add</span>     sp, sp, <span class="hljs-preprocessor">#32</span>
+      <span class="hljs-number">0x0337a700</span>: bde0      <span class="hljs-keyword">pop</span>     {<span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r7</span>, pc}
+      <span class="hljs-number">0x0337a702</span>: <span class="hljs-number">9103</span>      str     <span class="hljs-built_in">r1</span>, [sp, <span class="hljs-preprocessor">#12]</span>
+      <span class="hljs-number">0x0337a704</span>: <span class="hljs-number">9204</span>      str     <span class="hljs-built_in">r2</span>, [sp, <span class="hljs-preprocessor">#16]</span>
+      <span class="hljs-number">0x0337a706</span>: <span class="hljs-number">9305</span>      str     <span class="hljs-built_in">r3</span>, [sp, <span class="hljs-preprocessor">#20]</span>
+      <span class="hljs-number">0x0337a708</span>: f8d9e2a8  ldr<span class="hljs-preprocessor">.w</span>   lr, [<span class="hljs-built_in">r9</span>, <span class="hljs-preprocessor">#680]  ; pTestSuspend</span>
+      <span class="hljs-number">0x0337a70c</span>: <span class="hljs-number">47</span>f0      blx     lr
+        StackMap [native_pc=<span class="hljs-number">0x337a70f</span>] (dex_pc=<span class="hljs-number">0x0</span>, native_pc_offset=<span class="hljs-number">0x3a</span>, dex_register_map_offset=<span class="hljs-number">0x3</span>, inline_info_offset=<span class="hljs-number">0xffffffff</span>, register_mask=<span class="hljs-number">0x0</span>, stack_mask=<span class="hljs-number">0</span>b111000)
+          v0: <span class="hljs-keyword">in</span> stack (<span class="hljs-number">12</span>) [entry <span class="hljs-number">3</span>]
+          v1: <span class="hljs-keyword">in</span> stack (<span class="hljs-number">16</span>) [entry <span class="hljs-number">4</span>]
+          v2: <span class="hljs-keyword">in</span> stack (<span class="hljs-number">20</span>) [entry <span class="hljs-number">5</span>]
+      <span class="hljs-number">0x0337a70e</span>: <span class="hljs-number">9903</span>      ldr     <span class="hljs-built_in">r1</span>, [sp, <span class="hljs-preprocessor">#12]</span>
+      <span class="hljs-number">0x0337a710</span>: <span class="hljs-number">9</span>a04      ldr     <span class="hljs-built_in">r2</span>, [sp, <span class="hljs-preprocessor">#16]</span>
+      <span class="hljs-number">0x0337a712</span>: <span class="hljs-number">9</span>b05      ldr     <span class="hljs-built_in">r3</span>, [sp, <span class="hljs-preprocessor">#20]</span>
+      <span class="hljs-number">0x0337a714</span>: e7ea      b       -<span class="hljs-number">44</span> (<span class="hljs-number">0x0337a6ec</span>)
+</code></pre>
+
+<p>这个代码很长，你也许会奇怪，为什么简单的一句源码，会产生如此多的机器码呢？下面我为大家分段解析。 <br>
+解析时，请大家注意对照我说的部分</p>
+
+
+
+<h2 id="quickmethodframeinfo">QuickMethodFrameInfo</h2>
+
+<p>首先，看到的”QuickMethodFrameInfo”部分，定义了相关代码的信息，包含：frame_size_in_bytes： 这个信息指出堆栈的大小。该例子中的值是48。下面的机器码中(0x0337a6dc-0x0337a6de)，我们可以看到push指令和sub指令正好占用了堆栈的48字节。 <br>
+core_spill_mask： 需要保存的寄存器值。这个值是0x000040e0，对应的就是0x337a6dc的 push    {r5, r6, r7, lr}  (lr即r14)。 <br>
+vr_stack_locations: 则定义了dex寄存器在堆栈上的位置。</p>
+
+
+
+<h2 id="code部分">Code部分</h2>
+
+<p>接下来，CODE部分，包含了所有相关的代码。CODE部分包括5部分： <br>
+1. 堆栈检测部分：0x0337a6d4-0x337a6d8，检测现在的堆栈是否溢出的，否则将会产生一个堆栈溢出的错误 <br>
+2. 程序头部分：0x0337a6dc-0x0337a6f0, 主要是保护现场，保存参数，检查停止点等 <br>
+3. 程序正文部分：0x0337a6f2-0x0337a6fc，dex字节码的实现部分 <br>
+4. 程序结尾部分：0x0337a6fe-0x0337a700 负责恢复现场，然后返回 <br>
+5. 执行检查点部分：0x0337a702-0x0337a714:  调用检查点，执行一些任务，比如GC等等。 <br>
+这些部分，包含了一个程序大部分组成。 <br>
+第一部分的堆栈检测比较简单，我们不详细说了，从第二部分开始。</p>
+
+
+
+<h3 id="程序头部分">程序头部分</h3>
+
+<p>这一部分的代码</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x0337a6dc</span>: b5e0      <span class="hljs-keyword">push</span>    {<span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r7</span>, lr}
+      <span class="hljs-number">0x0337a6de</span>: b088      <span class="hljs-keyword">sub</span>     sp, sp, <span class="hljs-preprocessor">#32</span>
+      <span class="hljs-number">0x0337a6e0</span>: <span class="hljs-number">9000</span>      str     <span class="hljs-built_in">r0</span>, [sp, <span class="hljs-preprocessor">#0]</span>
+      <span class="hljs-number">0x0337a6e2</span>: f8b9c000  ldrh<span class="hljs-preprocessor">.w</span>  <span class="hljs-built_in">r12</span>, [<span class="hljs-built_in">r9</span>, <span class="hljs-preprocessor">#0]  ; state_and_flags</span>
+      <span class="hljs-number">0x0337a6e6</span>: f1bc0f00  cmp<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r12</span>, <span class="hljs-preprocessor">#0</span>
+      <span class="hljs-number">0x0337a6ea</span>: d10a      bne     +<span class="hljs-number">20</span> (<span class="hljs-number">0x0337a702</span>)
+      <span class="hljs-number">0x0337a6ec</span>: <span class="hljs-number">461</span>d      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r5</span>, <span class="hljs-built_in">r3</span>
+      <span class="hljs-number">0x0337a6ee</span>: <span class="hljs-number">460</span>e      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r6</span>, <span class="hljs-built_in">r1</span>
+      <span class="hljs-number">0x0337a6f0</span>: <span class="hljs-number">4617</span>      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r7</span>, <span class="hljs-built_in">r2</span></code></pre>
+
+<p>需要注意的是，在ART里面，参数传递是使用r0~r3 (ARM架构），这一点与标准的C stdcall是一样的。不过，r0是被固定为参数ArtMethod*，即目前被调用函数的指针，如果是非static函数，那么r1则是this指针，否则r1就是第一个参数。依次是java函数中声明的其他参数。 <br>
+  如果参数超过了寄存器的数目，则用堆栈传递。关于堆栈传递参数的方法，我们会在后面章节中详细说明。 <br>
+  这里看到，前两条语句是保存寄存器并分配堆栈。第3条语句(0x0337a6e0) 将r0(ArtMethod*)的值放在了栈顶。这是ART的规范要求，所有的java method，必须在堆栈上放入它的函数指针，这样在遍历栈的时候，ART就知道这个栈归属哪个函数。 <br>
+  第4～6句 (0x0337a6e2-0x0337a6ea) 是读取 Thread对象的state_and_flags成员，判断是否有检查点，如果有则转到检查点来执行。 <br>
+  r9参数总是放的当前线程的Thread对象指针。 <br>
+  第7句以后，则是保存参数到寄存器中，以便后面使用（实际上并没有使用，这说明ART的编译器还存在优化的空间）。</p>
+
+<h3 id="调用部分">调用部分</h3>
+
+<p>要调用一个函数，ART必须做的事情是：1. 得到这个函数的入口地址；2. 准备参数；3. 调用</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x0337a6f2</span>: <span class="hljs-number">6808</span>      ldr     <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#0]</span>
+      <span class="hljs-number">0x0337a6f4</span>: f8d004c8  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#1224]</span>
+      <span class="hljs-number">0x0337a6f8</span>: f8d0e020  ldr<span class="hljs-preprocessor">.w</span>   lr, [<span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#32]</span>
+      <span class="hljs-number">0x0337a6fc</span>: <span class="hljs-number">47</span>f0      blx     lr</code></pre>
+
+<p>在这里，r1是this指针，第0x0337a6f2是取得this的class对象，放到r0，然后从r0中取得被调用的onCreate函数的ArtMethod*指针，再保存到r0中。第三步是从ArtMethod中取得入口地址（放在32偏移处），最后调用。 <br>
+onCreate(Bundle) 函数需要3个参数：  <br>
+r0: 指向onCreate(Bundle)的ArtMethod*; <br>
+r1: this指针 <br>
+r2: Bundle对象指针。 <br>
+我们看到，ART巧妙的将ArtMethod的值取到R0后，就把它作为参数来使用。而r1,r2的值自进入函数后就没有被改变，所以就直接使用了。 <br>
+最后一步调用blx跳转到函数入口。 blx指令是跳转到寄存器指定的地址，同时把下条指令的地址放入到lr寄存器，方便函数调用后返回。</p>
+
+<h3 id="程序结束部分">程序结束部分</h3>
+
+<p>这部分很简单，就是恢复堆栈和寄存器。 <br>
+因为这个函数没有返回值，所以这里省略了返回值的处理。正常情况下，返回值是放在r0,r1寄存器内的。</p>
+
+
+
+<h3 id="检查点调用部分">检查点调用部分</h3>
+
+<p>检查点是ART内一个非常重要的功能，ART依靠检查点来实现GC、异常处理等一系列关键功能。 <br>
+ART为每个线程都分配了一个Thread对象，这个对象中有一个pTestSuspend入口，这个入口就是用来执行检查点函数调用的。</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs http">      <span class="hljs-attribute">0x0337a702</span>: <span class="hljs-string">9103      str     r1, [sp, #12]</span>
+      <span class="hljs-attribute">0x0337a704</span>: <span class="hljs-string">9204      str     r2, [sp, #16]</span>
+      <span class="hljs-attribute">0x0337a706</span>: <span class="hljs-string">9305      str     r3, [sp, #20]</span>
+      <span class="hljs-attribute">0x0337a708</span>: <span class="hljs-string">f8d9e2a8  ldr.w   lr, [r9, #680]  ; pTestSuspend</span>
+      <span class="hljs-attribute">0x0337a70c</span>: <span class="hljs-string">47f0      blx     lr</span>
+      <span class="hljs-attribute">0x0337a70e</span>: <span class="hljs-string">9903      ldr     r1, [sp, #12]</span>
+      <span class="hljs-attribute">0x0337a710</span>: <span class="hljs-string">9a04      ldr     r2, [sp, #16]</span>
+      <span class="hljs-attribute">0x0337a712</span>: <span class="hljs-string">9b05      ldr     r3, [sp, #20]</span>
+      <span class="hljs-attribute">0x0337a714</span>: <span class="hljs-string">e7ea      b       -44 (0x0337a6ec)</span></code></pre>
+
+<p>这段代码从0x0337a702-0x0337a712 是调用pTestSuspend入口的，调用入口不需要参数，所以前面它保存了r1, r2, r3三个参数，调用后又恢复了r1,r2,r3参数。至于要保存那些参数，根据实际情况定。 <br>
+在最后一条语句，则是返回到调用现场，继续运行。这里它没有使用blx这样的调用，而是直接用b指令，目的应该是为了尽量减少寄存器的使用。</p>
+
+<h1 id="了解dex各类指令以及异常的实现方法">了解dex各类指令以及异常的实现方法</h1>
+
+<p>接下来，我们了解下各类dex指令的实现。这些指令的实现都和class、object、method、field的实现结构密切相关，但是，在我们具体了解这些结构的具体内容之前，我们先了解下ART是怎样使用它们的，就更容易理解这些结构为什么被设计成那种样子。</p>
+
+<p>上文提到了invoke的实现，这里我们就不再解释</p>
+
+
+
+<h2 id="dex指令的实现">dex指令的实现</h2>
+
+
+
+<h3 id="const-string">const-string</h3>
+
+
+
+<h4 id="boot内的字符串查找">boot内的字符串查找</h4>
+
+<p>dex代码：</p>
+
+
+
+
+
+<p>对应的机器码反汇编后是</p>
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x02d7a184</span>: <span class="hljs-number">4</span>a1f      ldr     <span class="hljs-built_in">r2</span>, [pc, <span class="hljs-preprocessor">#124]  ; 0x6fbf9ef0                                                                     </span>
+      <span class="hljs-number">0x02d7a186</span>: <span class="hljs-number">4601</span>      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r1</span>, <span class="hljs-built_in">r0</span>   
+      <span class="hljs-number">0x02d7a188</span>: <span class="hljs-number">4607</span>      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r7</span>, <span class="hljs-built_in">r0</span>   
+      <span class="hljs-number">0x02d7a18a</span>: <span class="hljs-number">4690</span>      <span class="hljs-keyword">mov</span>     <span class="hljs-built_in">r8</span>, <span class="hljs-built_in">r2</span>   
+      <span class="hljs-number">0x02d7a18c</span>: <span class="hljs-number">6808</span>      ldr     <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#0] </span></code></pre>
+
+<p>其中0x02d7a184就是加载字符串地址的代码。可以看到，读取pc偏移124的值（0x6fbf93f0) 即时字符串对象的地址。 <br>
+pc + 124得到的值是 0x2D7A202 , 让他对齐到4字节后，就是地址 0x2D7A204:</p>
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x02d7a204</span>: <span class="hljs-number">9</span>ef0      ldr     <span class="hljs-built_in">r6</span>, [sp, <span class="hljs-preprocessor">#960]</span>
+      <span class="hljs-number">0x02d7a206</span>: <span class="hljs-number">6</span>fbf      ldr     <span class="hljs-built_in">r7</span>, [<span class="hljs-built_in">r7</span>, <span class="hljs-preprocessor">#120] </span></code></pre>
+
+<p>注意这里0x2d7a204位置不是代码，而是数据，但是反汇编器没有识别，仍旧当作代码来解析。我们看到，204处是9ef0, 206处是6fbf，合在一起，正是一个4字节地址：0x6fbf93f0 (因为arm是小端）。 <br>
+这个地址是一个绝对地址，它实际指向的是boot.art映射的内存。我摘取的代码来自boot.oat。因为art会把boot.art加载到一个固定地址，所以，这里的代码可以这样处理。 <br>
+另外需要注意的是，这里得到的地址，并不是字符串的地址，而是java String对象的地址。因为C语言里面的字符串是字符数组，是无法让java语言处理的。</p>
+
+<h4 id="应用的字符串查找方法">应用的字符串查找方法</h4>
+
+<p>如果是应用程序的oat文件，没有对应的art映射文件，应该如何处理呢？ <br>
+实际上，ART是通过bss段的数据来实现的。 <br>
+为了说明这个问题，我们下载一个应用的oat看看。</p>
+
+
+
+<pre class="prettyprint"><code class="language-pre hljs mel">adb pull /data/dalvik-cache/arm/<span class="hljs-keyword">system</span><span class="hljs-variable">@app</span><span class="hljs-variable">@Bluetooth</span><span class="hljs-variable">@Bluetooth</span>.apk<span class="hljs-variable">@classes</span>.dex
+oatdump --oat-<span class="hljs-keyword">file</span>=<span class="hljs-keyword">system</span><span class="hljs-variable">@app</span><span class="hljs-variable">@Bluetooth</span><span class="hljs-variable">@Bluetooth</span>.apk<span class="hljs-variable">@classes</span>.dex &gt; bluetooth.txt</code></pre>
+
+<p>首先，我用readelf -a system@app@Bluetooth@Bluetooth.apk@classes.dex 看看这个文件的结构（只摘抄关键的部分）：</p>
+
+<pre class="prettyprint"><code class="language-pre hljs vbnet">节头：
+  [Nr] Name              Type            Addr     <span class="hljs-keyword">Off</span>    Size   ES Flg Lk Inf Al
+.....
+  [ <span class="hljs-number">3</span>] .bss              NOBITS          <span class="hljs-number">00</span>f0b000 <span class="hljs-number">000000</span> <span class="hljs-number">06</span>b354 <span class="hljs-number">00</span>   A  <span class="hljs-number">0</span>   <span class="hljs-number">0</span> <span class="hljs-number">4096</span>
+....
+Symbol table <span class="hljs-comment">'.dynsym' contains 6 entries:</span>
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     <span class="hljs-number">0</span>: <span class="hljs-number">00000000</span>     <span class="hljs-number">0</span> NOTYPE  LOCAL  <span class="hljs-keyword">DEFAULT</span>  UND 
+     <span class="hljs-number">1</span>: <span class="hljs-number">00001000</span> <span class="hljs-number">0x8f3000</span> <span class="hljs-built_in">OBJECT</span>  <span class="hljs-keyword">GLOBAL</span> <span class="hljs-keyword">DEFAULT</span>    <span class="hljs-number">1</span> oatdata
+     <span class="hljs-number">2</span>: <span class="hljs-number">008</span>f4000 <span class="hljs-number">0x6165a0</span> <span class="hljs-built_in">OBJECT</span>  <span class="hljs-keyword">GLOBAL</span> <span class="hljs-keyword">DEFAULT</span>    <span class="hljs-number">2</span> oatexec
+     <span class="hljs-number">3</span>: <span class="hljs-number">00</span>f0a59c     <span class="hljs-number">4</span> <span class="hljs-built_in">OBJECT</span>  <span class="hljs-keyword">GLOBAL</span> <span class="hljs-keyword">DEFAULT</span>    <span class="hljs-number">2</span> oatlastword
+     <span class="hljs-number">4</span>: <span class="hljs-number">00</span>f0b000 <span class="hljs-number">0x6b354</span> <span class="hljs-built_in">OBJECT</span>  <span class="hljs-keyword">GLOBAL</span> <span class="hljs-keyword">DEFAULT</span>    <span class="hljs-number">3</span> oatbss
+     <span class="hljs-number">5</span>: <span class="hljs-number">00</span>f76350     <span class="hljs-number">4</span> <span class="hljs-built_in">OBJECT</span>  <span class="hljs-keyword">GLOBAL</span> <span class="hljs-keyword">DEFAULT</span>    <span class="hljs-number">3</span> oatbsslastword</code></pre>
+
+<p>请注意下，“节头”中第3条 .bss，起始位置是 00f0b000，大小是06354， 对应”Symbol table ‘.dynsym’ 中的第4条，即“oatbss”部分。 <br>
+bss段是用来指定没有初始值的全局和静态变量的，在文件中没有分配空间，但是加载到内存中时，需要分配空间。程序启动时，系统会自动清零。 <br>
+oatbss段，就被ART用来存放各种全局变量和静态变量，其中就包括这些常量字符串对象。 <br>
+经过计算，oatbss的范围是 0x00f0b000-0x00f76354  (最后4字节即时oatbsslastword)</p>
+
+<p>下面，我们在看看一个加载的例子。首先，看一下dex的写法：</p>
+
+
+
+<p>这条指令，是加载dex文件中，索引为20455的字符串。 <br>
+的对应的汇编代码：</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x008f4366</span>: f6456086  <span class="hljs-keyword">movw</span>    <span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#24198</span>
+      <span class="hljs-number">0x008f436a</span>: f2c00065  movt    <span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#101</span>
+      <span class="hljs-number">0x008f436e</span>: <span class="hljs-number">4478</span>      <span class="hljs-keyword">add</span>     <span class="hljs-built_in">r0</span>, pc  
+      <span class="hljs-number">0x008f4370</span>: <span class="hljs-number">900</span>b      str     <span class="hljs-built_in">r0</span>, [sp, <span class="hljs-preprocessor">#44]</span>
+      <span class="hljs-number">0x008f4372</span>: <span class="hljs-number">6802</span>      ldr     <span class="hljs-built_in">r2</span>, [<span class="hljs-built_in">r0</span>, <span class="hljs-preprocessor">#0]</span>
+      <span class="hljs-number">0x008f4374</span>: <span class="hljs-number">2</span>a00      cmp     <span class="hljs-built_in">r2</span>, <span class="hljs-preprocessor">#0  </span>
+      <span class="hljs-number">0x008f4376</span>: f00081f8  beq<span class="hljs-preprocessor">.w</span>   +<span class="hljs-number">1008</span> (<span class="hljs-number">0x008f476a</span>)                                                                               
+      <span class="hljs-number">0x008f437a</span>: <span class="hljs-number">9206</span>      str     <span class="hljs-built_in">r2</span>, [sp, <span class="hljs-preprocessor">#24]</span></code></pre>
+
+<p>movw是将立即数放入寄存器低16位，movt是放入到高16位。故此，前两条语句，使 r0的值为 0x655e86。 <br>
+第三条语句含义为r0 = r0 + pc，此时pc的值0x008f4372, 这时，r0的值为 0xF4A1F8。该值正好在 0x00f0b000-0x00f76354 范围内，即是oatbss内部的内容。所以，这是取一个静态的字符串对象的地址。 <br>
+第6，7条指令(cmp r2, #0; beq.w +1008 ) 则是判断对象是否初始化，没有初始化，就去加载这个字符串。加载字符串的地址是 0x008f476a: </p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs http">      <span class="hljs-attribute">0x008f476a</span>: <span class="hljs-string">900e      str     r0, [sp, #56]</span>
+      <span class="hljs-attribute">0x008f476c</span>: <span class="hljs-string">f64470e7  movw    r0, #20455</span>
+      <span class="hljs-attribute">0x008f4770</span>: <span class="hljs-string">f8d9e154  ldr.w   lr, [r9, #340]  ; pResolveString</span>
+      <span class="hljs-attribute">0x008f4774</span>: <span class="hljs-string">47f0      blx     lr</span>
+      <span class="hljs-attribute">0x008f4776</span>: <span class="hljs-string">4602      mov     r2, r0  </span>
+      <span class="hljs-attribute">0x008f4778</span>: <span class="hljs-string">980e      ldr     r0, [sp, #56]</span>
+      <span class="hljs-attribute">0x008f477a</span>: <span class="hljs-string">e5fe      b       -1028 (0x008f437a)  </span></code></pre>
+
+<p>首先，ART保存了r0寄存器（因为r0要作为参数和返回值），然后从pThread (r9) 中取得pResolveString的地址，然后调用。得到的结果，保存在r2中，然后恢复r0值，在跳转到回去，继续执行。</p>
+
+<p>ART为了避免寄存器被污染，所以为每次加载字符串的地方都生成了这种辅助代码。</p>
+
+<h3 id="const-class">const-class</h3>
+
+<p>根据各种情况，可以分为多种实现</p>
+
+
+
+<h4 id="method-加载本身所在类">method 加载本身所在类</h4>
+
+<p>ArtMethod第一个成员就是declaring_class, 因此这种情况下，直接从ArtMethod指针中获取就可以。比如下面的例子</p>
+
+<pre class="prettyprint"><code class="language-c++ hljs avrasm">  <span class="hljs-number">5</span>: java<span class="hljs-preprocessor">.lang</span><span class="hljs-preprocessor">.Object</span> java<span class="hljs-preprocessor">.text</span><span class="hljs-preprocessor">.AttributedCharacterIterator</span>$Attribute<span class="hljs-preprocessor">.readResolve</span>() (dex_method_idx=<span class="hljs-number">9453</span>)
+    DEX CODE:
+      ....
+      <span class="hljs-number">0x0004</span>: <span class="hljs-number">1</span>c02 <span class="hljs-number">8</span>c03                 | const-class v2, java<span class="hljs-preprocessor">.text</span><span class="hljs-preprocessor">.AttributedCharacterIterator</span>$Attribute // type<span class="hljs-localvars">@908</span> </code></pre>
+
+<p>要加载的就是method所在的类 <br>
+对应的机器码是</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs r">    CODE: (code_offset=<span class="hljs-number">0x02d7c6dd</span> size_offset=<span class="hljs-number">0x02d7c6d8</span> size=<span class="hljs-number">240</span>)<span class="hljs-keyword">...</span>
+<span class="hljs-keyword">...</span>
+      <span class="hljs-number">0x02d7c6e4</span>: e92d45e0  push    {r5, r6, r7, r8, r10, lr} 
+      <span class="hljs-number">0x02d7c6e8</span>: b086      sub     sp, sp, <span class="hljs-comment">#24</span>
+      <span class="hljs-number">0x02d7c6ea</span>: <span class="hljs-number">9000</span>      str     r0, [sp, <span class="hljs-comment">#0] </span>
+      <span class="hljs-number">0x02d7c6ec</span>: f8b9c000  ldrh.w  r12, [r9, <span class="hljs-comment">#0]  ; state_and_flags</span>
+      <span class="hljs-number">0x02d7c6f0</span>: f1bc0f00  cmp.w   r12, <span class="hljs-comment">#0  </span>
+      <span class="hljs-number">0x02d7c6f4</span>: d158      bne     +<span class="hljs-number">176</span> (<span class="hljs-number">0x02d7c7a8</span>)
+      <span class="hljs-number">0x02d7c6f6</span>: <span class="hljs-number">4605</span>      mov     r5, r0   
+<span class="hljs-keyword">...</span>
+      <span class="hljs-number">0x02d7c706</span>: 682f      ldr     r7, [r5, <span class="hljs-comment">#0]                                                                                     </span>
+      <span class="hljs-number">0x02d7c708</span>: 42b8      cmp     r0, r7   </code></pre>
+
+<p>我保留了入口部分的代码，可以看到，r0是入参，ArtMethod指针，首先r0被保存到r5，然后，取r5 + 0偏移位置的值(即delcaring_class_)，就获得了class的地址。</p>
+
+
+
+<h4 id="其他情况下取得class的方法">其他情况下取得class的方法</h4>
+
+<p>如果要取得一个和当前method没有任何关系的class，就要用到ArtMethod中一个非常重要的成员： dex_cache_resolved_types_ 中。在arm平台，它的偏移是<em>24</em> <br>
+比如，下面的例子：</p>
+
+
+
+
+
+<p>java.lang.Enum类与当前的method没有任何关联，它的获取是通过 <br>
+art_method-&gt;dex_cache_resolved_types_[228] 获取的。下面的代码如下：（请注意注释)</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x02da522a</span>: <span class="hljs-number">69</span>b9      ldr     <span class="hljs-built_in">r1</span>, [<span class="hljs-built_in">r7</span>, <span class="hljs-preprocessor">#24] //r7 是ArtMethod指针，即当前函数, 将 r1 = art_method-&gt;dex_cache_resolved_types_                                               </span>
+      <span class="hljs-number">0x02da522c</span>: f8d11390  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r1</span>, [<span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#912]  //取 r1[912]。  912 = 228 * 4</span>
+      <span class="hljs-number">0x02da5230</span>: <span class="hljs-number">9104</span>      str     <span class="hljs-built_in">r1</span>, [sp, <span class="hljs-preprocessor">#16]</span>
+      <span class="hljs-number">0x02da5232</span>: <span class="hljs-number">4288</span>      cmp     <span class="hljs-built_in">r0</span>, <span class="hljs-built_in">r1</span>
+</code></pre>
+
+<p>一个class地址占用4字节（即使是64位的架构，class也是占用4字节），所以228 * 4 = 912，即是 偏移地址。</p>
+
+<p>需要注意的是，上面例子，我给出的是java.lang.Enum，这是一个基础类，所以可以认为这个类一定是被解析过的，可以直接使用的，如果加载一个任意类，那么ART就不能保证这个类一定被解析过，所以需要检查一下，如果没有加载，就会先去加载。比如下面的例子</p>
+
+
+
+
+
+<p>对应的机器码：</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x00904da4</span>: f8db1018  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r1</span>, [<span class="hljs-built_in">r11</span>, <span class="hljs-preprocessor">#24]</span>
+      <span class="hljs-number">0x00904da8</span>: f8d11540  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r1</span>, [<span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#1344]</span>
+      <span class="hljs-number">0x00904dac</span>: <span class="hljs-number">2900</span>      cmp     <span class="hljs-built_in">r1</span>, <span class="hljs-preprocessor">#0  </span>
+      <span class="hljs-number">0x00904dae</span>: f0008165  beq<span class="hljs-preprocessor">.w</span>   +<span class="hljs-number">714</span> (<span class="hljs-number">0x0090507c</span>)
+      <span class="hljs-number">0x00904db2</span>: <span class="hljs-number">9105</span>      str     <span class="hljs-built_in">r1</span>, [sp, <span class="hljs-preprocessor">#20]</span></code></pre>
+
+<p>这里，r11是ArtMethod*指针。取得对象后，会检测一下是否为空(0)，如果为空，就会跳转到 0x0090507c：</p>
+
+<pre class="prettyprint"><code class="language-armasm hljs http">      <span class="hljs-attribute">0x0090507c</span>: <span class="hljs-string">f44f70a8  mov.w   r0, #336</span>
+      <span class="hljs-attribute">0x00905080</span>: <span class="hljs-string">f8d9e150  ldr.w   lr, [r9, #336]  ; pInitializeType</span>
+      <span class="hljs-attribute">0x00905084</span>: <span class="hljs-string">47f0      blx     lr</span>
+      <span class="hljs-attribute">0x00905086</span>: <span class="hljs-string">4601      mov     r1, r0  </span>
+      <span class="hljs-attribute">0x00905088</span>: <span class="hljs-string">e693      b       -730 (0x00904db2)</span></code></pre>
+
+<p>这里，r9就是pThread指针，调用pInitiliazeType函数，参数是class的索引：336。初始化成功后，就再跳回去继续执行。</p>
+
+<h3 id="new-instance">new-instance</h3>
+
+<p>在dex中，new一个对象，被分拆成两个指令：new-instance和invoke-direct。即先创建对象，然后在调用构造函数。我们重点关注的是创建对象 <br>
+例如</p>
+
+
+
+
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs http">      <span class="hljs-attribute">0x00905fe4</span>: <span class="hljs-string">9900      ldr     r1, [sp, #0]</span>
+      <span class="hljs-attribute">0x00905fe6</span>: <span class="hljs-string">f240106d  movw    r0, #365</span>
+      <span class="hljs-attribute">0x00905fea</span>: <span class="hljs-string">f8d9e11c  ldr.w   lr, [r9, #284]  ; pAllocObject</span>
+      <span class="hljs-attribute">0x00905fee</span>: <span class="hljs-string">47f0      blx     lr</span></code></pre>
+
+<p>r9是pThread指针，调用pThread-&gt;pAllocObject。其中，参数r0是class的index, 参数r1是调用者的ArtMethod。 <br>
+因为ArtMethod中包含很多信息，所以这个信息是很重要的。 <br>
+基本上所有的实现都是这样的。</p>
+
+<h3 id="getput-instance-field">get/put instance field</h3>
+
+<p>ART会将所有的field转换为它们在object中的偏移，所以field的存取相对简单很多。</p>
+
+
+
+<h4 id="iget">iget</h4>
+
+<p>比如：</p>
+
+
+
+
+
+<p>它的含义是 v2 = v3.mDhcpLease。 <br>
+对应的实现</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x00906872</span>: <span class="hljs-number">6</span>b2a      ldr     <span class="hljs-built_in">r2</span>, [<span class="hljs-built_in">r5</span>, <span class="hljs-preprocessor">#48]</span>
+      <span class="hljs-number">0x00906874</span>: <span class="hljs-number">9207</span>      str     <span class="hljs-built_in">r2</span>, [sp, <span class="hljs-preprocessor">#28]</span></code></pre>
+
+<p>r5 即对应的v3寄存器对象，#48就是field mDhcpLease在v3中的偏移。v2对应的sp + 28的位置（因为寄存器不够用了），所以，它先被加载到r2寄存器，然后再存入到sp上。 <br>
+之所以用r2寄存器，是因为r2寄存器马上要作为参数传递给即将调用的函数。这是ART一个优化措施。</p>
+
+
+
+<h3 id="iput">iput</h3>
+
+<p>iput的实现与iget的实现非常类似，查找field的方法都是一样的。但是iput-object有一个不同的地方：iput-object要同步card-table。 <br>
+card-table是一个GC相关的数据。简单来说，card-table是记录object引用关系的。 <br>
+iput-object会导致对象的引用关系发生变化，这时，ART就要更新对应的card-table，让GC能够知道那块内存变脏了，需要重新查找。 <br>
+直接看机器码：</p>
+
+
+
+<pre class="prettyprint"><code class="language-armasm hljs avrasm">      <span class="hljs-number">0x00906c52</span>: <span class="hljs-number">65</span>fe      str     <span class="hljs-built_in">r6</span>, [<span class="hljs-built_in">r7</span>, <span class="hljs-preprocessor">#92]</span>
+      <span class="hljs-number">0x00906c54</span>: f8d90080  ldr<span class="hljs-preprocessor">.w</span>   <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r9</span>, <span class="hljs-preprocessor">#128]  ; card_table</span>
+      <span class="hljs-number">0x00906c58</span>: <span class="hljs-number">09</span>f9      lsrs    <span class="hljs-built_in">r1</span>, <span class="hljs-built_in">r7</span>, <span class="hljs-preprocessor">#7</span>
+      <span class="hljs-number">0x00906c5a</span>: <span class="hljs-number">5440</span>      strb    <span class="hljs-built_in">r0</span>, [<span class="hljs-built_in">r0</span>, <span class="hljs-built_in">r1</span>]</code></pre>
+
+<p>第一条指令就是实现iput-object的： r7.field = r6。92就是field的offset <br>
+剩下的语句，翻译成c伪代码就是:</p>
+
+
+
+<pre class="prettyprint"><code class="language-c++ hljs fix"><span class="hljs-attribute">card_table </span>=<span class="hljs-string"> pThread-&gt;card_table;
+card_table[r7 &gt;&gt; 7] = card_table&amp;0xff;</span></code></pre>
+
+<p>ART中，card_table不是位，而是以字节为单位管理一块内存，一个字节对应128字节的数据，所以r7 &gt;&gt; 7 后就能得到它的索引。如果对应内存脏了，那么对应的字节就会设置为一个特定值。 <br>
+这个特定值正好是card_table地址的最低字节。 <br>
+ART这样设计自然是为了效率。</p>
+
+<h3 id="getput-static-field">get/put static field</h3>
+
+<p>sget, sput的实现与iget, iput非常类似，只是object需要换成class的指针。ART的class对象后面同样放置了static field的值，而且是sget,sput都直接使用偏移来访问。同样的sput-object指令也会更新card-table，方法也是一样的。有兴趣的读者可以自己查阅。</p>				</article>
+
+
+			</section>
+			
+						<br>
+		
+					
+		
+		
+		</div>
+		<div class="col-4 d-none d-xl-block">
+			
+			
+
+
+<div class="sidebox">
+	<div class="boxhead">
+		<span>精彩推荐</span>
+	</div>
+	<div class="boxcontent">
+						<div class="item">
+			<a href="http://www.jeepxie.net/article/6798.html" rel="bookmark" class="title">form表单action提交问题详解</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/35845.html" rel="bookmark" class="title">微信分享代码，朋友圈分享代码</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/102864.html" rel="bookmark" class="title">TTL电平 和 232电平的区别和转化</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/125036.html" rel="bookmark" class="title">第一周编程题_分数</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/129563.html" rel="bookmark" class="title">大学计算机专业毕业生怎么做毕业设计开题报告？</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/178128.html" rel="bookmark" class="title">Linux性能诊断工具</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/195206.html" rel="bookmark" class="title">在Ubuntu 16.04上为树莓派(RaspBerry Pi 3)编译Android 7（Nougat）</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/286360.html" rel="bookmark" class="title">每日一笑</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/427312.html" rel="bookmark" class="title">笔记3：avr引脚熔丝位需要注意</a>
+		</div>
+				<div class="item">
+			<a href="http://www.jeepxie.net/article/499735.html" rel="bookmark" class="title">android开发的布局技巧-tools</a>
+		</div>
+		
+	</div>
+</div>
+
+<div class="sidebox">
+	<div class="boxhead">
+		<span>Tags</span>
+	</div>
+	<div class="boxcontent">
+		<a href="http://www.jeepxie.net/tag/androidsdkjingxiang/" class="tag-link-5315" title="1 topics" rel="tag" style="font-size: 12px; color:#971B6B;">android&nbsp;sdk&nbsp;镜像</a>
+<a href="http://www.jeepxie.net/tag/linuxoracle11/" class="tag-link-7928" title="1 topics" rel="tag" style="font-size: 12px; color:#93154D;">linux&nbsp;oracle11</a>
+<a href="http://www.jeepxie.net/tag/pmunix/" class="tag-link-7395" title="1 topics" rel="tag" style="font-size: 12px; color:#4C7E4E;">pmunix</a>
+<a href="http://www.jeepxie.net/tag/prepare/" class="tag-link-8213" title="1 topics" rel="tag" style="font-size: 12px; color:#717A1E;">prepare</a>
+<a href="http://www.jeepxie.net/tag/udptaojiezi/" class="tag-link-3167" title="1 topics" rel="tag" style="font-size: 12px; color:#CE8387;">UDP套接字</a>
+<a href="http://www.jeepxie.net/tag/dongtaiguihuabeibao/" class="tag-link-428" title="1 topics" rel="tag" style="font-size: 12px; color:#8BDBE1;">动态规划-背包</a>
+<a href="http://www.jeepxie.net/tag/jiagoushi/" class="tag-link-1753" title="2 topics" rel="tag" style="font-size: 13px; color:#DD9059;">架构师</a>
+<a href="http://www.jeepxie.net/tag/baidubei/" class="tag-link-5226" title="1 topics" rel="tag" style="font-size: 12px; color:#7B5340;">百度杯</a>
+<a href="http://www.jeepxie.net/tag/suanfajiangjie/" class="tag-link-9528" title="1 topics" rel="tag" style="font-size: 12px; color:#18AD9D;">算法讲解</a>
+<a href="http://www.jeepxie.net/tag/jianpanjianting/" class="tag-link-5802" title="1 topics" rel="tag" style="font-size: 12px; color:#2C7211;">键盘监听</a>			</div>
+</div>		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col text-center">
+      <hr>
+      <div class="license">
+            2020 jeepxie.net            webmaster#jeepxie.net            <br>12 q. 0.011 s.<br>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备10005923号</a>
+      </div>      
+      
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+</body></html>

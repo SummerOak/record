@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Built-By: Signflinger
+Created-By: Android Gradle 4.0.0
+
+Name: AndroidManifest.xml
+SHA-256-Digest: swrtz+zRdiijLed2DrOBe9PCaugmqdtMAyb+t2A3Acg=
+
+Name: classes.dex
+SHA-256-Digest: XNxDKmJ6JQHeArVToL5ei2kz0dcJYhaTb7ZfgzAtEg8=
+
+Name: res/drawable-v24/$ic_launcher_foreground__0.xml
+SHA-256-Digest: vteOtWF/kjY6F1Ev/GsZC7PJCjtSdUW2CFZzlFq3yvE=
+
+Name: res/drawable-v24/ic_launcher_foreground.xml
+SHA-256-Digest: wWmfz2sS615YILxq0ivOk2hoY9oCGthHdTgQCuKcj8Y=
+
+Name: res/drawable/ic_launcher_background.xml
+SHA-256-Digest: wuGPl8WLvEtEZrK0+kcE6M0GK+BbRefw32lHmupfUdM=
+
+Name: resources.arsc
+SHA-256-Digest: lZDxNL6JldZ+auDJA78CTuoQYF99Ab+l+UYHX8FzMWU=
+
